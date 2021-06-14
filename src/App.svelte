@@ -43,16 +43,18 @@
   console.log(sd);
   for (let i = 150; i <= 400; i += 10) {
     labels.push(`$${i}`);
-    cumulative.push(Math.round(100 * normalcdf((i - mean) / sd)) / 100);
+    const chance = normalcdf((i - mean) / sd);
+    cumulative.push(chance.toFixed(3));
   }
 
   console.log(cumulative);
 
   let data = {
+    title: "Cumulative Chance of Margin Call",
     labels,
     datasets: [
       {
-        name: "Cumulative Chance of Margin Call",
+        name: "Chance of Margin Call",
         values: cumulative,
       },
     ],
