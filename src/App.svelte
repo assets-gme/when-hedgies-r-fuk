@@ -1,4 +1,6 @@
 <script>
+  import Chart from "svelte-frappe-charts";
+
   function normalcdf(X) {
     //HASTINGS.  MAX ERROR = .000001
     const T = 1 / (1 + 0.2316419 * Math.abs(X));
@@ -21,9 +23,9 @@
 
   let todayClose;
 
-  $: mean =
+  let mean =
     closingPrices.reduce((total, curr) => total + curr) / closingPrices.length;
-  $: sd = Math.sqrt(
+  let sd = Math.sqrt(
     closingPrices.reduce((total, curr) => total + Math.pow(curr - mean, 2)) /
       closingPrices.length -
       1
@@ -32,17 +34,42 @@
   $: score = (todayClose - mean) / sd;
 
   $: probabilityOfMarginCall = normalcdf(score);
+
+  let labels = [];
+  let probabilities = [];
+  let cumulative = [];
+
+  console.log(mean);
+  console.log(sd);
+  for (let i = 150; i <= 400; i += 10) {
+    labels.push(`$${i}`);
+    cumulative.push(Math.round(100 * normalcdf((i - mean) / sd)) / 100);
+  }
+
+  console.log(cumulative);
+
+  let data = {
+    labels,
+    datasets: [
+      {
+        name: "Cumulative Chance of Margin Call",
+        values: cumulative,
+      },
+    ],
+  };
 </script>
 
 <main>
   <label>Sample Price: <input bind:value={todayClose} type="number" /></label>
 
-  Mean: {mean.toFixed(2)}<br />
-  SD: {sd.toFixed(2)}<br />
-
   {#if todayClose && todayClose > 0}
     Probability of Margin Call: {probabilityOfMarginCall.toFixed(2) * 100}%
   {/if}
+
+  Mean: {mean.toFixed(2)}<br />
+  SD: {sd.toFixed(2)}<br />
+
+  <Chart {data} type="line" />
 </main>
 
 <style>
