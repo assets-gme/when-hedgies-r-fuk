@@ -63,7 +63,9 @@
   <label>Sample Price: <input bind:value={todayClose} type="number" /></label>
 
   {#if todayClose && todayClose > 0}
-    Probability of Margin Call: {probabilityOfMarginCall.toFixed(2) * 100}%
+    <p>
+      Probability of Margin Call: {probabilityOfMarginCall.toFixed(2) * 100}%
+    </p>
   {/if}
 
   Mean: {mean.toFixed(2)}<br />
