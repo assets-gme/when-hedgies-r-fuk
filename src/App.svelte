@@ -62,18 +62,28 @@
 </script>
 
 <main>
-  <label>Sample Price: <input bind:value={todayClose} type="number" /></label>
+  <label
+    >Sample Price: <input
+      bind:value={todayClose}
+      type="number"
+      placeholder="313.14"
+    /></label
+  >
 
   {#if todayClose && todayClose > 0}
     <p>
-      Probability of Margin Call: {probabilityOfMarginCall.toFixed(2) * 100}%
+      Probability of Margin Call at ${todayClose.toFixed(2)}:
+      <b><i>{(probabilityOfMarginCall * 100).toFixed(2)}%</i></b>
     </p>
   {/if}
 
+  <h3>Cumulative Chance of Margin Call</h3>
+  <Chart {data} type="line" />
+
+  <hr />
+
   Mean: {mean.toFixed(2)}<br />
   SD: {sd.toFixed(2)}<br />
-
-  <Chart {data} type="line" />
 </main>
 
 <style>
