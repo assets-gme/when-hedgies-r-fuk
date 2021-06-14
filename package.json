@@ -8,7 +8,7 @@
     "dev": "rollup -c -w",
     "start": "sirv public --no-clear",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build --dist ./public --no-push"
+    "deploy": "gh-pages -d build --dist ./public"
   },
   "repository": {
     "type": "git",
